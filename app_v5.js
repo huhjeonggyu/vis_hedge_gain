@@ -251,8 +251,9 @@ function ensureBaseline(run) {
 }
 
 function getSpreadBaselineMethod(run) {
-  if (run?.methods?.includes(FIXED_SPREAD_BASELINE)) return FIXED_SPREAD_BASELINE;
+  if (run?.methods?.includes(state.baselineMethod)) return state.baselineMethod;
   if (run?.methods?.includes('ppgdpo_zero')) return 'ppgdpo_zero';
+  if (run?.methods?.includes(FIXED_SPREAD_BASELINE)) return FIXED_SPREAD_BASELINE;
   return run?.methods?.[0] || null;
 }
 
@@ -406,12 +407,12 @@ function updateSampleViewControls() {
 
 function updateBaselineControls(run) {
   const spreadBaseline = getSpreadBaselineMethod(run);
-  elements.baselineSelect.innerHTML = spreadBaseline
-    ? `<option value="${spreadBaseline}">${methodDisplayName(spreadBaseline)}</option>`
-    : '';
+  elements.baselineSelect.innerHTML = run.methods
+    .map((method) => `<option value="${method}">${methodDisplayName(method)}</option>`)
+    .join('');
   if (spreadBaseline) elements.baselineSelect.value = spreadBaseline;
-  elements.baselineSelect.disabled = true;
-  elements.baselineSelect.title = 'Fixed to Predictive Static for a stable cross-method comparison.';
+  elements.baselineSelect.disabled = false;
+  elements.baselineSelect.title = 'Gap reference used in the cumulative gap chart.';
 }
 
 function updateMethodControls(run) {
@@ -476,7 +477,7 @@ function renderRunMeta(run) {
 
   const spreadBaseline = getSpreadBaselineMethod(run);
   elements.spreadTitle.textContent = `Cumulative gap vs ${methodDisplayName(spreadBaseline)}`;
-  elements.spreadSubtitle.textContent = `Selected method wealth relative to ${methodDisplayName(spreadBaseline)}.`;
+  elements.spreadSubtitle.textContent = `Selected method wealth relative to the user-selected reference: ${methodDisplayName(spreadBaseline)}.`;
 
   elements.summaryTitle.textContent = `Summary · ${getViewLabel()}`;
   renderUniverseHelp(run);
@@ -783,14 +784,14 @@ function renderSpreadChart(run) {
   const spreadBaselineMethod = getSpreadBaselineMethod(run);
   const baseline = getSeriesForView(run, spreadBaselineMethod);
   if (!baseline) {
-    emptyPlot(elements.spreadChart, 'Predictive Static baseline is not available for this run.');
+    emptyPlot(elements.spreadChart, 'The selected gap reference is not available for this run.');
     return;
   }
 
   const methods = (state.selectedMethods || []).filter((method) => method !== spreadBaselineMethod);
 
   if (methods.length === 0) {
-    emptyPlot(elements.spreadChart, 'Select at least one method besides Predictive Static.');
+    emptyPlot(elements.spreadChart, `Select at least one method besides ${methodDisplayName(spreadBaselineMethod)}.`);
     return;
   }
 
@@ -811,7 +812,7 @@ function renderSpreadChart(run) {
     .filter(Boolean);
 
   if (!traces.length) {
-    emptyPlot(elements.spreadChart, 'No valid Predictive Static gap trace is available for the current selection.');
+    emptyPlot(elements.spreadChart, `No valid cumulative gap trace is available against ${methodDisplayName(spreadBaselineMethod)}.`);
     return;
   }
 
@@ -1137,6 +1138,12 @@ async function init() {
     state.sampleView = elements.sampleViewSelect.value;
     state.selectedDateIndex = null;
     await renderCurrentRun();
+  });
+  elements.baselineSelect.addEventListener('change', async () => {
+    state.baselineMethod = elements.baselineSelect.value;
+    const run = await loadRun(state.runId);
+    renderRunMeta(run);
+    renderSpreadChart(run);
   });
   elements.dateSlider.addEventListener('input', async () => {
     const run = await loadRun(state.runId);
