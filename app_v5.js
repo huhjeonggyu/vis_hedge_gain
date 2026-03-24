@@ -290,11 +290,46 @@ function combineSegmentsCached(run, method) {
   return combined;
 }
 
+function normalizeSegmentCached(run, method, view) {
+  run.__segmentCache = run.__segmentCache || {};
+  const key = `${method}::${view}`;
+  if (run.__segmentCache[key]) return run.__segmentCache[key];
+  const raw = run.seriesByMethod?.[method]?.[view];
+  if (!raw) return null;
+
+  const normalized = {
+    ...raw,
+    dates: [...(raw.dates || [])],
+    decisionDates: [...(raw.decisionDates || [])],
+    netReturns: [...(raw.netReturns || [])],
+    grossReturns: [...(raw.grossReturns || [])],
+    turnover: [...(raw.turnover || [])],
+    riskyWeight: [...(raw.riskyWeight || [])],
+    hedgeSignalL2: [...(raw.hedgeSignalL2 || [])],
+    costateJxyL2: [...(raw.costateJxyL2 || [])],
+    topWeights: [...(raw.topWeights || [])],
+  };
+
+  let wealth = 1.0;
+  let peak = 1.0;
+  normalized.wealth = [];
+  normalized.drawdown = [];
+  for (const ret of normalized.netReturns) {
+    wealth *= 1 + Number(ret || 0);
+    peak = Math.max(peak, wealth);
+    normalized.wealth.push(Number(wealth.toFixed(8)));
+    normalized.drawdown.push(Number((wealth / peak - 1).toFixed(8)));
+  }
+
+  run.__segmentCache[key] = normalized;
+  return normalized;
+}
+
 function getSeriesForView(run, method, view = state.sampleView) {
   const methodSeries = run.seriesByMethod?.[method];
   if (!methodSeries) return null;
   if (view === 'combined') return combineSegmentsCached(run, method);
-  return methodSeries[view] || null;
+  return normalizeSegmentCached(run, method, view);
 }
 
 function getSummaryMap(run) {
@@ -733,11 +768,22 @@ function renderSpreadChart(run) {
     emptyPlot(elements.spreadChart, 'Choose a valid baseline.');
     return;
   }
-  const methods = (state.selectedMethods || []).filter((method) => method !== state.baselineMethod);
+
+  let methods = (state.selectedMethods || []).filter((method) => method !== state.baselineMethod);
+
+  if (state.baselineMethod === 'ppgdpo_zero') {
+    methods = methods.filter((method) => method === 'ppgdpo');
+    if (methods.length === 0) {
+      emptyPlot(elements.spreadChart, 'Cumulative hedging gain is only shown for PG-DPO (With Hedging) relative to PG-DPO (No Hedging).');
+      return;
+    }
+  }
+
   if (methods.length === 0) {
     emptyPlot(elements.spreadChart, 'Select at least one method besides the baseline.');
     return;
   }
+
   const traces = methods
     .map((method) => {
       const series = getSeriesForView(run, method);
@@ -753,6 +799,12 @@ function renderSpreadChart(run) {
       };
     })
     .filter(Boolean);
+
+  if (!traces.length) {
+    emptyPlot(elements.spreadChart, 'No valid hedging-gain trace is available for the current selection.');
+    return;
+  }
+
   const baseLayout = commonLayout(run);
   const layout = {
     ...baseLayout,
