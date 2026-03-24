@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Allocation Explorer</title>
+    <meta
+      name="description"
+      content="Interactive explorer for dynamic allocation experiments across equity-and-Treasury universes."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.plot.ly/plotly-3.4.0.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div>
+          <div class="eyebrow">Static Vercel-friendly build</div>
+          <h1>Dynamic Allocation Explorer</h1>
+          <p class="muted">
+            Focused on interactive comparison. Change universe, candidate, and sample view; then inspect
+            wealth, drawdown, hedging gains, exposure, turnover, and portfolio weights. Universe and factor-candidate panels explain what is inside each selection.
+          </p>
+        </div>
+
+        <section class="control-group">
+          <label for="universeSelect">Investable universe</label>
+          <select id="universeSelect"></select>
+          <div id="universeHelp" class="help-text"></div>
+        </section>
+
+        <section class="control-group">
+          <label for="candidateSelect">Factor-zoo candidate</label>
+          <select id="candidateSelect"></select>
+          <div id="candidateHelp" class="help-text"></div>
+        </section>
+
+        <section class="control-group">
+          <label for="sampleViewSelect">Sample view</label>
+          <select id="sampleViewSelect">
+            <option value="combined">Combined</option>
+            <option value="inSample">In-sample only</option>
+            <option value="outOfSample">Out-of-sample only</option>
+          </select>
+          <div class="help-text">Combined stitches the in-sample validation window and the OOS test window, with a dotted separator at the OOS start.</div>
+        </section>
+
+        <section class="control-group">
+          <label for="baselineSelect">Relative-gap baseline</label>
+          <select id="baselineSelect"></select>
+          <div class="help-text">Default is the no-hedging PG-DPO baseline.</div>
+        </section>
+
+        <section class="control-group">
+          <div class="method-header">
+            <label>Methods</label>
+            <div class="pill-row compact">
+              <button type="button" class="secondary-btn" id="methodsHedgeBtn">Hedge pair</button>
+              <button type="button" class="secondary-btn" id="methodsPaper4Btn">Paper 4</button>
+              <button type="button" class="secondary-btn" id="methodsAllBtn">All</button>
+              <button type="button" class="secondary-btn" id="methodsNoneBtn">None</button>
+            </div>
+          </div>
+          <div id="methodCheckboxes" class="checkbox-list"></div>
+        </section>
+
+        <section class="control-group sticky-block">
+          <div class="method-header">
+            <label for="dateSlider">Portfolio date</label>
+            <div id="selectedDateLabel" class="date-label"></div>
+          </div>
+          <input id="dateSlider" type="range" min="0" max="0" step="1" value="0" />
+          <div class="help-text">Drag the slider or click any time-series chart. The selected portfolio date is marked across the charts.</div>
+        </section>
+
+        <section class="control-group metadata-block">
+          <div class="method-header">
+            <label>Current run</label>
+            <a id="downloadRunLink" href="#" target="_blank" rel="noopener">Raw JSON</a>
+          </div>
+          <div id="runMeta" class="pill-row"></div>
+        </section>
+      </aside>
+
+      <main class="main-content">
+        <section class="hero-card">
+          <div class="hero-header">
+            <div>
+              <div class="eyebrow" id="heroUniverseLabel">FF49</div>
+              <h2 id="heroRunLabel">Rank 1</h2>
+              <div id="heroViewLabel" class="hero-subtitle muted small"></div>
+            </div>
+            <div id="metricCards" class="metric-grid"></div>
+          </div>
+        </section>
+
+        <section class="chart-card full-width">
+          <div class="chart-header">
+            <div>
+              <h3>Cumulative wealth</h3>
+              <div class="muted small" id="wealthSubtitle">Net-return wealth paths.</div>
+            </div>
+          </div>
+          <div id="wealthChart" class="chart"></div>
+        </section>
+
+        <section class="chart-grid two-up">
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Drawdown</h3>
+            </div>
+            <div id="drawdownChart" class="chart"></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <h3 id="spreadTitle">Cumulative gap vs baseline</h3>
+                <div class="muted small" id="spreadSubtitle">Selected method wealth relative to the chosen baseline.</div>
+              </div>
+            </div>
+            <div id="spreadChart" class="chart"></div>
+          </div>
+        </section>
+
+        <section class="chart-grid two-up">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <h3>Monthly hedging return gap</h3>
+                <div class="muted small">PG-DPO (With Hedging) net return minus PG-DPO (No Hedging).</div>
+              </div>
+            </div>
+            <div id="hedgingReturnGapChart" class="chart"></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <h3>Trailing 12m hedging gain</h3>
+                <div class="muted small">Trailing 12-month cumulative gain of PG-DPO (With Hedging) over PG-DPO (No Hedging).</div>
+              </div>
+            </div>
+            <div id="rollingHedgingGainChart" class="chart"></div>
+          </div>
+        </section>
+
+        <section class="chart-grid two-up">
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Risky weight</h3>
+            </div>
+            <div id="riskyWeightChart" class="chart"></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Turnover</h3>
+            </div>
+            <div id="turnoverChart" class="chart"></div>
+          </div>
+        </section>
+
+        <section class="chart-card full-width">
+          <div class="chart-header">
+            <div>
+              <h3>Top portfolio weights at selected date</h3>
+              <div class="muted small">Grouped bars use the union of the largest absolute weights across selected methods.</div>
+            </div>
+          </div>
+          <div id="weightsChart" class="chart tall-chart"></div>
+        </section>
+
+        <section class="chart-card full-width">
+          <div class="chart-header">
+            <h3 id="summaryTitle">Summary</h3>
+          </div>
+          <div id="summaryTable"></div>
+        </section>
+      </main>
+    </div>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <script type="module" src="app_v5.js?v=5"></script>
+  </body>
+</html>
