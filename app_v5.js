@@ -152,6 +152,7 @@ const elements = {
   riskyWeightChart: document.getElementById('riskyWeightChart'),
   turnoverChart: document.getElementById('turnoverChart'),
   weightsChart: document.getElementById('weightsChart'),
+  weightsSubtitle: document.getElementById('weightsSubtitle'),
 };
 
 function formatPercent(value, digits = 2) {
@@ -603,6 +604,11 @@ function emptyPlot(div, message) {
         },
       ],
       margin: { l: 30, r: 20, t: 30, b: 30 },
+      hoverlabel: {
+        bgcolor: '#11182c',
+        bordercolor: '#44547a',
+        font: { color: '#f4f7fb', size: 13, family: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
+      },
     },
     buildPlotlyConfig(),
   );
@@ -681,6 +687,11 @@ function commonLayout(run, title = '') {
       orientation: 'h',
       y: 1.14,
       x: 0,
+    },
+    hoverlabel: {
+      bgcolor: '#11182c',
+      bordercolor: '#44547a',
+      font: { color: '#f4f7fb', size: 13, family: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
     },
     shapes: boundary.shapes,
     annotations: boundary.annotations,
@@ -896,58 +907,128 @@ function renderTurnoverChart(run) {
   bindDateClick(elements.turnoverChart, run);
 }
 
+function getWeightPairsAtIndex(run, method, index) {
+  const series = getSeriesForView(run, method);
+  const raw = series?.fullWeights?.[index] ?? series?.weights?.[index] ?? series?.topWeights?.[index] ?? [];
+  if (Array.isArray(raw)) {
+    if (raw.length === 0) return [];
+    if (Array.isArray(raw[0])) {
+      return raw.map(([asset, weight]) => [asset, Number(weight || 0)]);
+    }
+    if (typeof raw[0] === 'object' && raw[0] !== null) {
+      return raw.map((row) => [row.asset ?? row.name ?? row.label, Number(row.weight ?? row.value ?? 0)]).filter((row) => row[0]);
+    }
+  }
+  if (raw && typeof raw === 'object') {
+    return Object.entries(raw).map(([asset, weight]) => [asset, Number(weight || 0)]);
+  }
+  return [];
+}
+
+function hasNearlyFullWeights(run, pairMaps) {
+  const assetNames = run?.metadata?.assetNames || [];
+  if (!assetNames.length) return false;
+  const threshold = Math.max(12, Math.floor(assetNames.length * 0.8));
+  return [...pairMaps.values()].some((pairMap) => pairMap.size >= threshold);
+}
+
+function updateWeightsSubtitle(run, assetCount, totalCount, usingFullCoverage) {
+  if (!elements.weightsSubtitle) return;
+  const date = getSelectedDate(run) || 'selected date';
+  if (usingFullCoverage) {
+    elements.weightsSubtitle.textContent = `${assetCount} assets shown for ${date}. Hover to inspect exact portfolio weights.`;
+    return;
+  }
+  elements.weightsSubtitle.textContent = `Showing ${assetCount} saved weights for ${date}. Current deployed JSON keeps the top weights only; regenerate site data to inspect all ${totalCount || assetCount} assets.`;
+}
+
 function renderWeightsChart(run) {
   if (!state.selectedMethods || state.selectedMethods.length === 0) {
     emptyPlot(elements.weightsChart, 'Select at least one method.');
     return;
   }
+
   const index = state.selectedDateIndex ?? 0;
+  const pairMaps = new Map();
   const assetScores = new Map();
 
   for (const method of state.selectedMethods) {
-    const pairs = getSeriesForView(run, method)?.topWeights?.[index] || [];
+    const pairs = getWeightPairsAtIndex(run, method, index);
+    const pairMap = new Map(pairs);
+    pairMaps.set(method, pairMap);
     for (const [asset, weight] of pairs) {
       const current = assetScores.get(asset) || 0;
       assetScores.set(asset, Math.max(current, Math.abs(weight)));
     }
   }
 
-  const assets = [...assetScores.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10)
-    .map(([asset]) => asset);
+  const totalAssetNames = run?.metadata?.assetNames || [];
+  const usingFullCoverage = hasNearlyFullWeights(run, pairMaps);
+  let assets = [];
+
+  if (usingFullCoverage) {
+    assets = [...new Set([...totalAssetNames, ...assetScores.keys()])]
+      .filter((asset) => assetScores.has(asset))
+      .sort((a, b) => (assetScores.get(b) || 0) - (assetScores.get(a) || 0));
+  } else {
+    assets = [...assetScores.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .map(([asset]) => asset);
+  }
 
   if (assets.length === 0) {
     emptyPlot(elements.weightsChart, 'No weights available for this selection.');
+    updateWeightsSubtitle(run, 0, totalAssetNames.length, false);
     return;
   }
 
+  const displayAssets = assets.slice().reverse();
+  updateWeightsSubtitle(run, assets.length, totalAssetNames.length, usingFullCoverage);
+
   const traces = state.selectedMethods.map((method) => {
-    const pairMap = new Map(getSeriesForView(run, method)?.topWeights?.[index] || []);
+    const pairMap = pairMaps.get(method) || new Map();
     return {
       type: 'bar',
+      orientation: 'h',
       name: methodDisplayName(method),
-      x: assets,
-      y: assets.map((asset) => pairMap.get(asset) || 0),
+      y: displayAssets,
+      x: displayAssets.map((asset) => (pairMap.has(asset) ? pairMap.get(asset) : null)),
       marker: { color: methodColors[method] || undefined },
-      hovertemplate: '<b>%{fullData.name}</b><br>Asset=%{x}<br>Weight=%{y:.2%}<extra></extra>',
+      hovertemplate: '<b>%{fullData.name}</b><br>Asset=%{y}<br>Weight=%{x:.2%}<extra></extra>',
     };
   });
 
-  const baseLayout = commonLayout(run);
   const layout = {
-    ...baseLayout,
-    annotations: [],
-    shapes: [],
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(0,0,0,0)',
+    font: { color: '#f4f7fb' },
+    hovermode: 'closest',
+    hoverlabel: {
+      bgcolor: '#11182c',
+      bordercolor: '#44547a',
+      font: { color: '#f4f7fb', size: 14, family: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
+    },
+    margin: { l: 110, r: 28, t: 28, b: 56 },
     barmode: 'group',
+    height: Math.max(420, displayAssets.length * 24 + 140),
     xaxis: {
-      ...baseLayout.xaxis,
-      tickangle: -25,
+      gridcolor: 'rgba(255,255,255,0.08)',
+      zerolinecolor: 'rgba(255,255,255,0.08)',
+      tickformat: '.2%',
+      automargin: true,
     },
     yaxis: {
-      ...baseLayout.yaxis,
-      tickformat: '.0%',
+      automargin: true,
+      gridcolor: 'rgba(255,255,255,0.04)',
+      tickfont: { size: 11 },
     },
+    legend: {
+      orientation: 'h',
+      y: 1.08,
+      x: 0,
+    },
+    shapes: [],
+    annotations: [],
   };
   Plotly.react(elements.weightsChart, traces, layout, buildPlotlyConfig());
 }

@@ -349,3 +349,7 @@ input[type='range'] {
     flex-direction: column;
   }
 }
+
+
+#weightsChart.chart { min-height: 520px; }
+.summary-table { margin-bottom: 4px; }

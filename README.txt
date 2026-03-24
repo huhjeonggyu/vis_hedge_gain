@@ -1,0 +1,1 @@
+Replace index.html, app_v5.js, and styles.css in the deployed repo with these files.\nIf you want all assets, regenerate data with full weights; the current deployed JSON appears to keep top weights only.\n
