@@ -26,6 +26,7 @@ const viewLabels = {
   outOfSample: 'Out-of-sample',
 };
 
+const FIXED_SPREAD_BASELINE = 'predictive_static';
 
 const stageModelLabels = {
   const: 'Const',
@@ -249,6 +250,12 @@ function ensureBaseline(run) {
   }
 }
 
+function getSpreadBaselineMethod(run) {
+  if (run?.methods?.includes(FIXED_SPREAD_BASELINE)) return FIXED_SPREAD_BASELINE;
+  if (run?.methods?.includes('ppgdpo_zero')) return 'ppgdpo_zero';
+  return run?.methods?.[0] || null;
+}
+
 function getPeriods(run) {
   return run.periods || {};
 }
@@ -398,10 +405,13 @@ function updateSampleViewControls() {
 }
 
 function updateBaselineControls(run) {
-  elements.baselineSelect.innerHTML = run.methods
-    .map((method) => `<option value="${method}">${methodDisplayName(method)}</option>`)
-    .join('');
-  elements.baselineSelect.value = state.baselineMethod;
+  const spreadBaseline = getSpreadBaselineMethod(run);
+  elements.baselineSelect.innerHTML = spreadBaseline
+    ? `<option value="${spreadBaseline}">${methodDisplayName(spreadBaseline)}</option>`
+    : '';
+  if (spreadBaseline) elements.baselineSelect.value = spreadBaseline;
+  elements.baselineSelect.disabled = true;
+  elements.baselineSelect.title = 'Fixed to Predictive Static for a stable cross-method comparison.';
 }
 
 function updateMethodControls(run) {
@@ -464,13 +474,9 @@ function renderRunMeta(run) {
     elements.wealthSubtitle.textContent = `Net-return wealth paths for the ${getViewLabel().toLowerCase()} window. Solid line marks the selected portfolio date.`;
   }
 
-  if (state.baselineMethod === 'ppgdpo_zero') {
-    elements.spreadTitle.textContent = 'Cumulative hedging gain';
-    elements.spreadSubtitle.textContent = 'Selected method wealth relative to PG-DPO (No Hedging).';
-  } else {
-    elements.spreadTitle.textContent = `Cumulative gap vs ${methodDisplayName(state.baselineMethod)}`;
-    elements.spreadSubtitle.textContent = `Selected method wealth relative to ${methodDisplayName(state.baselineMethod)}.`;
-  }
+  const spreadBaseline = getSpreadBaselineMethod(run);
+  elements.spreadTitle.textContent = `Cumulative gap vs ${methodDisplayName(spreadBaseline)}`;
+  elements.spreadSubtitle.textContent = `Selected method wealth relative to ${methodDisplayName(spreadBaseline)}.`;
 
   elements.summaryTitle.textContent = `Summary · ${getViewLabel()}`;
   renderUniverseHelp(run);
@@ -774,24 +780,17 @@ function renderDrawdownChart(run) {
 }
 
 function renderSpreadChart(run) {
-  const baseline = getSeriesForView(run, state.baselineMethod);
+  const spreadBaselineMethod = getSpreadBaselineMethod(run);
+  const baseline = getSeriesForView(run, spreadBaselineMethod);
   if (!baseline) {
-    emptyPlot(elements.spreadChart, 'Choose a valid baseline.');
+    emptyPlot(elements.spreadChart, 'Predictive Static baseline is not available for this run.');
     return;
   }
 
-  let methods = (state.selectedMethods || []).filter((method) => method !== state.baselineMethod);
-
-  if (state.baselineMethod === 'ppgdpo_zero') {
-    methods = methods.filter((method) => method === 'ppgdpo');
-    if (methods.length === 0) {
-      emptyPlot(elements.spreadChart, 'Cumulative hedging gain is only shown for PG-DPO (With Hedging) relative to PG-DPO (No Hedging).');
-      return;
-    }
-  }
+  const methods = (state.selectedMethods || []).filter((method) => method !== spreadBaselineMethod);
 
   if (methods.length === 0) {
-    emptyPlot(elements.spreadChart, 'Select at least one method besides the baseline.');
+    emptyPlot(elements.spreadChart, 'Select at least one method besides Predictive Static.');
     return;
   }
 
@@ -802,7 +801,7 @@ function renderSpreadChart(run) {
       return {
         type: 'scatter',
         mode: 'lines',
-        name: `${methodDisplayName(method)} vs ${methodDisplayName(state.baselineMethod)}`,
+        name: `${methodDisplayName(method)} vs ${methodDisplayName(spreadBaselineMethod)}`,
         x: series.dates,
         y: series.wealth.map((value, idx) => value / baseline.wealth[idx] - 1),
         line: { color: methodColors[method] || undefined, width: 2.25 },
@@ -812,7 +811,7 @@ function renderSpreadChart(run) {
     .filter(Boolean);
 
   if (!traces.length) {
-    emptyPlot(elements.spreadChart, 'No valid hedging-gain trace is available for the current selection.');
+    emptyPlot(elements.spreadChart, 'No valid Predictive Static gap trace is available for the current selection.');
     return;
   }
 
@@ -1137,10 +1136,6 @@ async function init() {
   elements.sampleViewSelect.addEventListener('change', async () => {
     state.sampleView = elements.sampleViewSelect.value;
     state.selectedDateIndex = null;
-    await renderCurrentRun();
-  });
-  elements.baselineSelect.addEventListener('change', async () => {
-    state.baselineMethod = elements.baselineSelect.value;
     await renderCurrentRun();
   });
   elements.dateSlider.addEventListener('input', async () => {

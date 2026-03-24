@@ -46,9 +46,9 @@
         </section>
 
         <section class="control-group">
-          <label for="baselineSelect">Relative-gap baseline</label>
+          <label for="baselineSelect">Gap reference</label>
           <select id="baselineSelect"></select>
-          <div class="help-text">Default is the no-hedging PG-DPO baseline.</div>
+          <div class="help-text">Fixed to Predictive Static so the gap chart keeps the same interpretation across selections.</div>
         </section>
 
         <section class="control-group">
@@ -114,8 +114,8 @@
           <div class="chart-card">
             <div class="chart-header">
               <div>
-                <h3 id="spreadTitle">Cumulative gap vs baseline</h3>
-                <div class="muted small" id="spreadSubtitle">Selected method wealth relative to the chosen baseline.</div>
+                <h3 id="spreadTitle">Cumulative gap vs Predictive Static</h3>
+                <div class="muted small" id="spreadSubtitle">Selected method wealth relative to Predictive Static.</div>
               </div>
             </div>
             <div id="spreadChart" class="chart"></div>
@@ -180,6 +180,6 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <script type="module" src="app_v5.js?v=53"></script>
+    <script type="module" src="app_v5.js?v=54"></script>
   </body>
 </html>
