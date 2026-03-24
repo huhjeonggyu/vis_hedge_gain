@@ -1,0 +1,702 @@
+{
+  "generatedAt": "manual",
+  "datasetName": "dynalloc-v57-static-v5-postprocessed",
+  "defaultUniverse": "ff49",
+  "defaultRunId": "ff49-rank1",
+  "defaultSampleView": "combined",
+  "universes": [
+    {
+      "id": "ff6",
+      "label": "6 equity sleeves + Treasuries (+ cash)",
+      "candidateCount": 5,
+      "candidates": [
+        {
+          "runId": "ff6-rank1",
+          "rank": 1,
+          "spec": "pls_H2_k2",
+          "label": "Rank 1 · pls_H2_k2 · dcc__zero_cross",
+          "covarianceKind": "asset_dcc",
+          "stage2ModelLabel": "dcc__zero_cross",
+          "selectionUnitId": "pls_H2_k2__rolling240m_annual__regime_mean",
+          "headline": {
+            "deltaCerPpgdpoVsZero": -0.00036397,
+            "deltaCerPpgdpoVsEqualWeight": 0.01463459,
+            "deltaAnnRetPpgdpoVsZero": -0.00519815,
+            "deltaAnnRetPpgdpoVsEqualWeight": 0.01497321,
+            "deltaSharpePpgdpoVsZero": 0.01112245,
+            "deltaSharpePpgdpoVsEqualWeight": 0.13738522
+          },
+          "specInfo": {
+            "shortLabel": "PLS · H2 · k=2",
+            "description": "PLS-based factor-zoo candidate; with horizon H=2; and k=2 latent components.",
+            "horizon": 2,
+            "components": 2,
+            "inputBlocks": [
+              "PLS latent factors"
+            ],
+            "macroColumns": [
+              "Inflation YoY",
+              "Term spread",
+              "Default spread",
+              "Industrial production YoY",
+              "Unemployment change",
+              "Short rate",
+              "5Y Treasury yield",
+              "10Y Treasury yield"
+            ],
+            "bondColumns": [
+              "UST2Y",
+              "UST5Y",
+              "UST10Y"
+            ]
+          }
+        },
+        {
+          "runId": "ff6-rank2",
+          "rank": 2,
+          "spec": "pls_H2_k2",
+          "label": "Rank 2 · pls_H2_k2 · adcc__zero_cross",
+          "covarianceKind": "asset_adcc",
+          "stage2ModelLabel": "adcc__zero_cross",
+          "selectionUnitId": "pls_H2_k2__rolling240m_annual__regime_mean",
+          "headline": {
+            "deltaCerPpgdpoVsZero": -0.00035212,
+            "deltaCerPpgdpoVsEqualWeight": 0.01460128,
+            "deltaAnnRetPpgdpoVsZero": -0.00517951,
+            "deltaAnnRetPpgdpoVsEqualWeight": 0.01493954,
+            "deltaSharpePpgdpoVsZero": 0.01118066,
+            "deltaSharpePpgdpoVsEqualWeight": 0.13706578
+          },
+          "specInfo": {
+            "shortLabel": "PLS · H2 · k=2",
+            "description": "PLS-based factor-zoo candidate; with horizon H=2; and k=2 latent components.",
+            "horizon": 2,
+            "components": 2,
+            "inputBlocks": [
+              "PLS latent factors"
+            ],
+            "macroColumns": [
+              "Inflation YoY",
+              "Term spread",
+              "Default spread",
+              "Industrial production YoY",
+              "Unemployment change",
+              "Short rate",
+              "5Y Treasury yield",
+              "10Y Treasury yield"
+            ],
+            "bondColumns": [
+              "UST2Y",
+              "UST5Y",
+              "UST10Y"
+            ]
+          }
+        },
+        {
+          "runId": "ff6-rank3",
+          "rank": 3,
+          "spec": "pls_H12_k2",
+          "label": "Rank 3 · pls_H12_k2 · dcc__zero_cross",
+          "covarianceKind": "asset_dcc",
+          "stage2ModelLabel": "dcc__zero_cross",
+          "selectionUnitId": "pls_H12_k2__rolling240m_annual__regime_mean",
+          "headline": {
+            "deltaCerPpgdpoVsZero": -0.00024394,
+            "deltaCerPpgdpoVsEqualWeight": 0.01583312,
+            "deltaAnnRetPpgdpoVsZero": -0.00465229,
+            "deltaAnnRetPpgdpoVsEqualWeight": 0.01598712,
+            "deltaSharpePpgdpoVsZero": 0.0125159,
+            "deltaSharpePpgdpoVsEqualWeight": 0.14974294
+          },
+          "specInfo": {
+            "shortLabel": "PLS · H12 · k=2",
+            "description": "PLS-based factor-zoo candidate; with horizon H=12; and k=2 latent components.",
+            "horizon": 12,
+            "components": 2,
+            "inputBlocks": [
+              "PLS latent factors"
+            ],
+            "macroColumns": [
+              "Inflation YoY",
+              "Term spread",
+              "Default spread",
+              "Industrial production YoY",
+              "Unemployment change",
+              "Short rate",
+              "5Y Treasury yield",
+              "10Y Treasury yield"
+            ],
+            "bondColumns": [
+              "UST2Y",
+              "UST5Y",
+              "UST10Y"
+            ]
+          }
+        },
+        {
+          "runId": "ff6-rank4",
+          "rank": 4,
+          "spec": "pls_H24_k2",
+          "label": "Rank 4 · pls_H24_k2 · adcc",
+          "covarianceKind": "asset_adcc",
+          "stage2ModelLabel": "adcc",
+          "selectionUnitId": "pls_H24_k2__rolling240m_annual__baseline_mean",
+          "headline": {
+            "deltaCerPpgdpoVsZero": 0.00458978,
+            "deltaCerPpgdpoVsEqualWeight": 0.02762717,
+            "deltaAnnRetPpgdpoVsZero": 0.00021982,
+            "deltaAnnRetPpgdpoVsEqualWeight": 0.02472203,
+            "deltaSharpePpgdpoVsZero": 0.07873673,
+            "deltaSharpePpgdpoVsEqualWeight": 0.29202255
+          },
+          "specInfo": {
+            "shortLabel": "PLS · H24 · k=2",
+            "description": "PLS-based factor-zoo candidate; with horizon H=24; and k=2 latent components.",
+            "horizon": 24,
+            "components": 2,
+            "inputBlocks": [
+              "PLS latent factors"
+            ],
+            "macroColumns": [
+              "Inflation YoY",
+              "Term spread",
+              "Default spread",
+              "Industrial production YoY",
+              "Unemployment change",
+              "Short rate",
+              "5Y Treasury yield",
+              "10Y Treasury yield"
+            ],
+            "bondColumns": [
+              "UST2Y",
+              "UST5Y",
+              "UST10Y"
+            ]
+          }
+        },
+        {
+          "runId": "ff6-rank5",
+          "rank": 5,
+          "spec": "pls_H1_k2",
+          "label": "Rank 5 · pls_H1_k2 · regime_dcc__gated_cross",
+          "covarianceKind": "asset_regime_dcc",
+          "stage2ModelLabel": "regime_dcc__gated_cross",
+          "selectionUnitId": "pls_H1_k2__rolling240m_annual__regime_mean",
+          "headline": {
+            "deltaCerPpgdpoVsZero": 0.00262475,
+            "deltaCerPpgdpoVsEqualWeight": 0.02235307,
+            "deltaAnnRetPpgdpoVsZero": -0.00302697,
+            "deltaAnnRetPpgdpoVsEqualWeight": 0.02378189,
+            "deltaSharpePpgdpoVsZero": 0.04423406,
+            "deltaSharpePpgdpoVsEqualWeight": 0.20682983
+          },
+          "specInfo": {
+            "shortLabel": "PLS · H1 · k=2",
+            "description": "PLS-based factor-zoo candidate; with horizon H=1; and k=2 latent components.",
+            "horizon": 1,
+            "components": 2,
+            "inputBlocks": [
+              "PLS latent factors"
+            ],
+            "macroColumns": [
+              "Inflation YoY",
+              "Term spread",
+              "Default spread",
+              "Industrial production YoY",
+              "Unemployment change",
+              "Short rate",
+              "5Y Treasury yield",
+              "10Y Treasury yield"
+            ],
+            "bondColumns": [
+              "UST2Y",
+              "UST5Y",
+              "UST10Y"
+            ]
+          }
+        }
+      ],
+      "shortLabel": "FF6 + UST + cash",
+      "description": "Six equity sleeves, plus U.S. Treasuries at 2Y/5Y/10Y. Dynamic strategies may also leave residual wealth in cash, so the effective investable set includes a cash sleeve.",
+      "assetCount": 9,
+      "sampleAssets": [
+        "Average",
+        "Value",
+        "Weighted",
+        "Returns",
+        "--",
+        "Monthly",
+        "UST2Y",
+        "UST5Y"
+      ]
+    },
+    {
+      "id": "ff25",
+      "label": "25 equity portfolios + Treasuries (+ cash)",
+      "candidateCount": 5,
+      "candidates": [
+        {
+          "runId": "ff25-rank1",
+          "rank": 1,
+          "spec": "pls_ret_ff5_curve_macro7_H1_k2",
+          "label": "Rank 1 · pls_ret_ff5_curve_macro7_H1_k2 · const",
+          "covarianceKind": "constant",
+          "stage2ModelLabel": "const",
+          "selectionUnitId": "pls_ret_ff5_curve_macro7_H1_k2__rolling240m_annual__baseline_mean",
+          "headline": {
+            "deltaCerPpgdpoVsZero": 0.00434758,
+            "deltaCerPpgdpoVsEqualWeight": 0.02439247,
+            "deltaAnnRetPpgdpoVsZero": 0.00362037,
+            "deltaAnnRetPpgdpoVsEqualWeight": 0.01536155,
+            "deltaSharpePpgdpoVsZero": 0.03094325,
+            "deltaSharpePpgdpoVsEqualWeight": 0.1513678
+          },
+          "specInfo": {
+            "shortLabel": "PLS · (portfolio returns + FF5 factors + macro/curve inputs) · H1 · k=2",
+            "description": "PLS-based factor-zoo candidate; with horizon H=1; and k=2 latent components; using portfolio returns, FF5 factors, macro/curve inputs.",
+            "horizon": 1,
+            "components": 2,
+            "inputBlocks": [
+              "portfolio returns",
+              "FF5 factors",
+              "macro/curve inputs"
+            ],
+            "macroColumns": [
+              "Inflation YoY",
+              "Term spread",
+              "Default spread",
+              "Industrial production YoY",
+              "Unemployment change",
+              "Short rate",
+              "5Y Treasury yield",
+              "10Y Treasury yield"
+            ],
+            "bondColumns": [
+              "UST2Y",
+              "UST5Y",
+              "UST10Y"
+            ]
+          }
+        },
+        {
+          "runId": "ff25-rank2",
+          "rank": 2,
+          "spec": "pls_ret_ff5_curve_macro7_H1_k2",
+          "label": "Rank 2 · pls_ret_ff5_curve_macro7_H1_k2 · dcc",
+          "covarianceKind": "asset_dcc",
+          "stage2ModelLabel": "dcc",
+          "selectionUnitId": "pls_ret_ff5_curve_macro7_H1_k2__rolling240m_annual__baseline_mean",
+          "headline": {
+            "deltaCerPpgdpoVsZero": 0.00256911,
+            "deltaCerPpgdpoVsEqualWeight": 0.04040488,
+            "deltaAnnRetPpgdpoVsZero": 0.00126247,
+            "deltaAnnRetPpgdpoVsEqualWeight": 0.02447267,
+            "deltaSharpePpgdpoVsZero": 0.02473344,
+            "deltaSharpePpgdpoVsEqualWeight": 0.28489712
+          },
+          "specInfo": {
+            "shortLabel": "PLS · (portfolio returns + FF5 factors + macro/curve inputs) · H1 · k=2",
+            "description": "PLS-based factor-zoo candidate; with horizon H=1; and k=2 latent components; using portfolio returns, FF5 factors, macro/curve inputs.",
+            "horizon": 1,
+            "components": 2,
+            "inputBlocks": [
+              "portfolio returns",
+              "FF5 factors",
+              "macro/curve inputs"
+            ],
+            "macroColumns": [
+              "Inflation YoY",
+              "Term spread",
+              "Default spread",
+              "Industrial production YoY",
+              "Unemployment change",
+              "Short rate",
+              "5Y Treasury yield",
+              "10Y Treasury yield"
+            ],
+            "bondColumns": [
+              "UST2Y",
+              "UST5Y",
+              "UST10Y"
+            ]
+          }
+        },
+        {
+          "runId": "ff25-rank3",
+          "rank": 3,
+          "spec": "pls_ret_ff5_curve_macro7_H1_k2",
+          "label": "Rank 3 · pls_ret_ff5_curve_macro7_H1_k2 · adcc",
+          "covarianceKind": "asset_adcc",
+          "stage2ModelLabel": "adcc",
+          "selectionUnitId": "pls_ret_ff5_curve_macro7_H1_k2__rolling240m_annual__baseline_mean",
+          "headline": {
+            "deltaCerPpgdpoVsZero": 0.00261476,
+            "deltaCerPpgdpoVsEqualWeight": 0.04029955,
+            "deltaAnnRetPpgdpoVsZero": 0.00131265,
+            "deltaAnnRetPpgdpoVsEqualWeight": 0.02437018,
+            "deltaSharpePpgdpoVsZero": 0.02506587,
+            "deltaSharpePpgdpoVsEqualWeight": 0.28400687
+          },
+          "specInfo": {
+            "shortLabel": "PLS · (portfolio returns + FF5 factors + macro/curve inputs) · H1 · k=2",
+            "description": "PLS-based factor-zoo candidate; with horizon H=1; and k=2 latent components; using portfolio returns, FF5 factors, macro/curve inputs.",
+            "horizon": 1,
+            "components": 2,
+            "inputBlocks": [
+              "portfolio returns",
+              "FF5 factors",
+              "macro/curve inputs"
+            ],
+            "macroColumns": [
+              "Inflation YoY",
+              "Term spread",
+              "Default spread",
+              "Industrial production YoY",
+              "Unemployment change",
+              "Short rate",
+              "5Y Treasury yield",
+              "10Y Treasury yield"
+            ],
+            "bondColumns": [
+              "UST2Y",
+              "UST5Y",
+              "UST10Y"
+            ]
+          }
+        },
+        {
+          "runId": "ff25-rank4",
+          "rank": 4,
+          "spec": "pls_H24_k2",
+          "label": "Rank 4 · pls_H24_k2 · regime_dcc__gated_cross",
+          "covarianceKind": "asset_regime_dcc",
+          "stage2ModelLabel": "regime_dcc__gated_cross",
+          "selectionUnitId": "pls_H24_k2__rolling240m_annual__regime_mean",
+          "headline": {
+            "deltaCerPpgdpoVsZero": -0.00201723,
+            "deltaCerPpgdpoVsEqualWeight": 0.03449984,
+            "deltaAnnRetPpgdpoVsZero": -0.00378826,
+            "deltaAnnRetPpgdpoVsEqualWeight": 0.02047724,
+            "deltaSharpePpgdpoVsZero": -0.01283585,
+            "deltaSharpePpgdpoVsEqualWeight": 0.23194225
+          },
+          "specInfo": {
+            "shortLabel": "PLS · H24 · k=2",
+            "description": "PLS-based factor-zoo candidate; with horizon H=24; and k=2 latent components.",
+            "horizon": 24,
+            "components": 2,
+            "inputBlocks": [
+              "PLS latent factors"
+            ],
+            "macroColumns": [
+              "Inflation YoY",
+              "Term spread",
+              "Default spread",
+              "Industrial production YoY",
+              "Unemployment change",
+              "Short rate",
+              "5Y Treasury yield",
+              "10Y Treasury yield"
+            ],
+            "bondColumns": [
+              "UST2Y",
+              "UST5Y",
+              "UST10Y"
+            ]
+          }
+        },
+        {
+          "runId": "ff25-rank5",
+          "rank": 5,
+          "spec": "pls_ret_ff5_curve_macro7_H1_k2",
+          "label": "Rank 5 · pls_ret_ff5_curve_macro7_H1_k2 · regime_dcc__gated_cross",
+          "covarianceKind": "asset_regime_dcc",
+          "stage2ModelLabel": "regime_dcc__gated_cross",
+          "selectionUnitId": "pls_ret_ff5_curve_macro7_H1_k2__rolling240m_annual__baseline_mean",
+          "headline": {
+            "deltaCerPpgdpoVsZero": 0.00411083,
+            "deltaCerPpgdpoVsEqualWeight": 0.03691975,
+            "deltaAnnRetPpgdpoVsZero": 0.00286899,
+            "deltaAnnRetPpgdpoVsEqualWeight": 0.02274593,
+            "deltaSharpePpgdpoVsZero": 0.03477123,
+            "deltaSharpePpgdpoVsEqualWeight": 0.25177517
+          },
+          "specInfo": {
+            "shortLabel": "PLS · (portfolio returns + FF5 factors + macro/curve inputs) · H1 · k=2",
+            "description": "PLS-based factor-zoo candidate; with horizon H=1; and k=2 latent components; using portfolio returns, FF5 factors, macro/curve inputs.",
+            "horizon": 1,
+            "components": 2,
+            "inputBlocks": [
+              "portfolio returns",
+              "FF5 factors",
+              "macro/curve inputs"
+            ],
+            "macroColumns": [
+              "Inflation YoY",
+              "Term spread",
+              "Default spread",
+              "Industrial production YoY",
+              "Unemployment change",
+              "Short rate",
+              "5Y Treasury yield",
+              "10Y Treasury yield"
+            ],
+            "bondColumns": [
+              "UST2Y",
+              "UST5Y",
+              "UST10Y"
+            ]
+          }
+        }
+      ],
+      "shortLabel": "FF25 + UST + cash",
+      "description": "Twenty-five equity portfolios, plus U.S. Treasuries at 2Y/5Y/10Y. Dynamic strategies may also leave residual wealth in cash, so the effective investable set includes a cash sleeve.",
+      "assetCount": 28,
+      "sampleAssets": [
+        "asset_1",
+        "asset_2",
+        "asset_3",
+        "asset_4",
+        "asset_5",
+        "asset_6",
+        "asset_7",
+        "asset_8"
+      ]
+    },
+    {
+      "id": "ff49",
+      "label": "49 industries + Treasuries (+ cash)",
+      "candidateCount": 5,
+      "candidates": [
+        {
+          "runId": "ff49-rank1",
+          "rank": 1,
+          "spec": "pls_ret_ff5_curve_macro7_H6_k2",
+          "label": "Rank 1 · pls_ret_ff5_curve_macro7_H6_k2 · dcc",
+          "covarianceKind": "asset_dcc",
+          "stage2ModelLabel": "dcc",
+          "selectionUnitId": "pls_ret_ff5_curve_macro7_H6_k2__rolling240m_annual__baseline_mean",
+          "headline": {
+            "deltaCerPpgdpoVsZero": 0.00497704,
+            "deltaCerPpgdpoVsEqualWeight": 0.00197358,
+            "deltaAnnRetPpgdpoVsZero": 0.00464648,
+            "deltaAnnRetPpgdpoVsEqualWeight": -0.00819419,
+            "deltaSharpePpgdpoVsZero": 0.03679092,
+            "deltaSharpePpgdpoVsEqualWeight": -0.00342171
+          },
+          "specInfo": {
+            "shortLabel": "PLS · (portfolio returns + FF5 factors + macro/curve inputs) · H6 · k=2",
+            "description": "PLS-based factor-zoo candidate; with horizon H=6; and k=2 latent components; using portfolio returns, FF5 factors, macro/curve inputs.",
+            "horizon": 6,
+            "components": 2,
+            "inputBlocks": [
+              "portfolio returns",
+              "FF5 factors",
+              "macro/curve inputs"
+            ],
+            "macroColumns": [
+              "Inflation YoY",
+              "Term spread",
+              "Default spread",
+              "Industrial production YoY",
+              "Unemployment change",
+              "Short rate",
+              "5Y Treasury yield",
+              "10Y Treasury yield"
+            ],
+            "bondColumns": [
+              "UST2Y",
+              "UST5Y",
+              "UST10Y"
+            ]
+          }
+        },
+        {
+          "runId": "ff49-rank2",
+          "rank": 2,
+          "spec": "pls_ret_ff5_curve_macro7_H6_k2",
+          "label": "Rank 2 · pls_ret_ff5_curve_macro7_H6_k2 · adcc",
+          "covarianceKind": "asset_adcc",
+          "stage2ModelLabel": "adcc",
+          "selectionUnitId": "pls_ret_ff5_curve_macro7_H6_k2__rolling240m_annual__baseline_mean",
+          "headline": {
+            "deltaCerPpgdpoVsZero": 0.00514585,
+            "deltaCerPpgdpoVsEqualWeight": 0.00191913,
+            "deltaAnnRetPpgdpoVsZero": 0.00479152,
+            "deltaAnnRetPpgdpoVsEqualWeight": -0.00820764,
+            "deltaSharpePpgdpoVsZero": 0.03797573,
+            "deltaSharpePpgdpoVsEqualWeight": -0.00377763
+          },
+          "specInfo": {
+            "shortLabel": "PLS · (portfolio returns + FF5 factors + macro/curve inputs) · H6 · k=2",
+            "description": "PLS-based factor-zoo candidate; with horizon H=6; and k=2 latent components; using portfolio returns, FF5 factors, macro/curve inputs.",
+            "horizon": 6,
+            "components": 2,
+            "inputBlocks": [
+              "portfolio returns",
+              "FF5 factors",
+              "macro/curve inputs"
+            ],
+            "macroColumns": [
+              "Inflation YoY",
+              "Term spread",
+              "Default spread",
+              "Industrial production YoY",
+              "Unemployment change",
+              "Short rate",
+              "5Y Treasury yield",
+              "10Y Treasury yield"
+            ],
+            "bondColumns": [
+              "UST2Y",
+              "UST5Y",
+              "UST10Y"
+            ]
+          }
+        },
+        {
+          "runId": "ff49-rank3",
+          "rank": 3,
+          "spec": "pls_ret_ff5_curve_macro7_H6_k2",
+          "label": "Rank 3 · pls_ret_ff5_curve_macro7_H6_k2 · regime_dcc__gated_cross",
+          "covarianceKind": "asset_regime_dcc",
+          "stage2ModelLabel": "regime_dcc__gated_cross",
+          "selectionUnitId": "pls_ret_ff5_curve_macro7_H6_k2__rolling240m_annual__baseline_mean",
+          "headline": {
+            "deltaCerPpgdpoVsZero": 0.00044547,
+            "deltaCerPpgdpoVsEqualWeight": -0.00426778,
+            "deltaAnnRetPpgdpoVsZero": -0.00018715,
+            "deltaAnnRetPpgdpoVsEqualWeight": -0.0114232,
+            "deltaSharpePpgdpoVsZero": 0.0018283,
+            "deltaSharpePpgdpoVsEqualWeight": -0.04406149
+          },
+          "specInfo": {
+            "shortLabel": "PLS · (portfolio returns + FF5 factors + macro/curve inputs) · H6 · k=2",
+            "description": "PLS-based factor-zoo candidate; with horizon H=6; and k=2 latent components; using portfolio returns, FF5 factors, macro/curve inputs.",
+            "horizon": 6,
+            "components": 2,
+            "inputBlocks": [
+              "portfolio returns",
+              "FF5 factors",
+              "macro/curve inputs"
+            ],
+            "macroColumns": [
+              "Inflation YoY",
+              "Term spread",
+              "Default spread",
+              "Industrial production YoY",
+              "Unemployment change",
+              "Short rate",
+              "5Y Treasury yield",
+              "10Y Treasury yield"
+            ],
+            "bondColumns": [
+              "UST2Y",
+              "UST5Y",
+              "UST10Y"
+            ]
+          }
+        },
+        {
+          "runId": "ff49-rank4",
+          "rank": 4,
+          "spec": "pls_ret_ff5_curve_macro7_H6_k2",
+          "label": "Rank 4 · pls_ret_ff5_curve_macro7_H6_k2 · regime_dcc",
+          "covarianceKind": "asset_regime_dcc",
+          "stage2ModelLabel": "regime_dcc",
+          "selectionUnitId": "pls_ret_ff5_curve_macro7_H6_k2__rolling240m_annual__baseline_mean",
+          "headline": {
+            "deltaCerPpgdpoVsZero": 0.00044547,
+            "deltaCerPpgdpoVsEqualWeight": -0.00426778,
+            "deltaAnnRetPpgdpoVsZero": -0.00018715,
+            "deltaAnnRetPpgdpoVsEqualWeight": -0.0114232,
+            "deltaSharpePpgdpoVsZero": 0.0018283,
+            "deltaSharpePpgdpoVsEqualWeight": -0.04406149
+          },
+          "specInfo": {
+            "shortLabel": "PLS · (portfolio returns + FF5 factors + macro/curve inputs) · H6 · k=2",
+            "description": "PLS-based factor-zoo candidate; with horizon H=6; and k=2 latent components; using portfolio returns, FF5 factors, macro/curve inputs.",
+            "horizon": 6,
+            "components": 2,
+            "inputBlocks": [
+              "portfolio returns",
+              "FF5 factors",
+              "macro/curve inputs"
+            ],
+            "macroColumns": [
+              "Inflation YoY",
+              "Term spread",
+              "Default spread",
+              "Industrial production YoY",
+              "Unemployment change",
+              "Short rate",
+              "5Y Treasury yield",
+              "10Y Treasury yield"
+            ],
+            "bondColumns": [
+              "UST2Y",
+              "UST5Y",
+              "UST10Y"
+            ]
+          }
+        },
+        {
+          "runId": "ff49-rank5",
+          "rank": 5,
+          "spec": "pls_ret_ff5_curve_macro7_H6_k2",
+          "label": "Rank 5 · pls_ret_ff5_curve_macro7_H6_k2 · regime_dcc__gated_cross",
+          "covarianceKind": "asset_regime_dcc",
+          "stage2ModelLabel": "regime_dcc__gated_cross",
+          "selectionUnitId": "pls_ret_ff5_curve_macro7_H6_k2__rolling240m_annual__regime_mean",
+          "headline": {
+            "deltaCerPpgdpoVsZero": 0.00497348,
+            "deltaCerPpgdpoVsEqualWeight": 0.00232434,
+            "deltaAnnRetPpgdpoVsZero": 0.00471088,
+            "deltaAnnRetPpgdpoVsEqualWeight": -0.0080345,
+            "deltaSharpePpgdpoVsZero": 0.03703887,
+            "deltaSharpePpgdpoVsEqualWeight": -0.00106997
+          },
+          "specInfo": {
+            "shortLabel": "PLS · (portfolio returns + FF5 factors + macro/curve inputs) · H6 · k=2",
+            "description": "PLS-based factor-zoo candidate; with horizon H=6; and k=2 latent components; using portfolio returns, FF5 factors, macro/curve inputs.",
+            "horizon": 6,
+            "components": 2,
+            "inputBlocks": [
+              "portfolio returns",
+              "FF5 factors",
+              "macro/curve inputs"
+            ],
+            "macroColumns": [
+              "Inflation YoY",
+              "Term spread",
+              "Default spread",
+              "Industrial production YoY",
+              "Unemployment change",
+              "Short rate",
+              "5Y Treasury yield",
+              "10Y Treasury yield"
+            ],
+            "bondColumns": [
+              "UST2Y",
+              "UST5Y",
+              "UST10Y"
+            ]
+          }
+        }
+      ],
+      "shortLabel": "FF49 + UST + cash",
+      "description": "Forty-nine industry portfolios, plus U.S. Treasuries at 2Y/5Y/10Y. Dynamic strategies may also leave residual wealth in cash, so the effective investable set includes a cash sleeve.",
+      "assetCount": 52,
+      "sampleAssets": [
+        "Agric",
+        "Food",
+        "Soda",
+        "Beer",
+        "Smoke",
+        "Toys",
+        "Fun",
+        "Books"
+      ]
+    }
+  ]
+}
